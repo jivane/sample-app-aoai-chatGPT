@@ -23,7 +23,7 @@ def blob_name_from_file_page(filename, page = 0):
         return os.path.basename(filename)
 
 # Function to upload files to a blob container.
-def upload_files(filename, filePathName, blob_container ):
+def upload_files(filename, filePathName, blob_container):
     # If the file is a PDF, split it into pages and upload each page as a separate blob
     if os.path.splitext(filename)[1].lower() == ".pdf":
         reader = PdfReader(filePathName)
