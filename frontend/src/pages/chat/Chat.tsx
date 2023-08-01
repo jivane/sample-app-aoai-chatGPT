@@ -20,6 +20,7 @@ import {
 } from "../../api";
 import { Answer } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
+import { UploadFiles } from "../../components/UploadFiles";
 
 const Chat = () => {
     const lastQuestionRef = useRef<string>("");
@@ -238,6 +239,7 @@ const Chat = () => {
                                         <span className={styles.stopGeneratingText} aria-hidden="true">Stop generating</span>
                                 </Stack>
                             )}
+                            <UploadFiles className={styles.commandButton} />
                             <div
                                 role="button"
                                 tabIndex={0}

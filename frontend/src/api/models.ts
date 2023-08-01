@@ -56,3 +56,11 @@ export type UserInfo = {
     user_claims: any[];
     user_id: string;
 };
+export type IUploadFormData = {
+    formData: FormData;
+};
+
+export type IUploadResponse = {
+    success: boolean;
+    message?: string;
+};
