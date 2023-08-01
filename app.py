@@ -56,7 +56,7 @@ AZURE_OPENAI_SYSTEM_MESSAGE = os.environ.get("AZURE_OPENAI_SYSTEM_MESSAGE", "You
 AZURE_OPENAI_PREVIEW_API_VERSION = os.environ.get("AZURE_OPENAI_PREVIEW_API_VERSION", "2023-06-01-preview")
 AZURE_OPENAI_STREAM = os.environ.get("AZURE_OPENAI_STREAM", "true")
 AZURE_OPENAI_MODEL_NAME = os.environ.get("AZURE_OPENAI_MODEL_NAME", "gpt-35-turbo") # Name of the model, e.g. 'gpt-35-turbo' or 'gpt-4'
-
+AZURE_STORAGE_ACCOUNT = os.environ.get("AZURE_STORAGE_ACCOUNT") or "mystorageaccount"
 SHOULD_STREAM = True if AZURE_OPENAI_STREAM.lower() == "true" else False
 
 def is_chat_model():
@@ -263,7 +263,8 @@ def fileUpload():
     # Get the list of files from the request's FormData
     files = request.files.getlist('files')
     errors = {}
-    success = False   
+    success = False
+   
 
     for file in files:
         # Check if the file is allowed for upload based on its extension
@@ -276,6 +277,13 @@ def fileUpload():
             file.save(filePathName)
 
             # Upload the file to a cloud storage blob
+            #blob_container = BlobServiceClient.from_connection_string(conn_str=AZURE_STORAGE_ACCOUNT, container_name=UPLOAD_FOLDER, blob_name=filename)
+            
+            blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_ACCOUNT)
+
+            # Instantiate a ContainerClient
+            blob_container = blob_service_client.get_container_client(UPLOAD_FOLDER)
+
             upload_files(filename, filePathName, blob_container)
 
             # Extract text from the pdf document (Using PDF extraction)
