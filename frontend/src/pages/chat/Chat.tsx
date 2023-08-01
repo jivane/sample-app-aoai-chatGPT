@@ -239,7 +239,7 @@ const Chat = () => {
                                         <span className={styles.stopGeneratingText} aria-hidden="true">Stop generating</span>
                                 </Stack>
                             )}
-                            <UploadFiles className={styles.commandButton} />
+                            <UploadFiles/>
                             <div
                                 role="button"
                                 tabIndex={0}
