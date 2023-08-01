@@ -6,6 +6,9 @@ import openai
 from flask import Flask, Response, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
+from azure.core.credentials import AzureKeyCredential
+from azure.search.documents import SearchClient
+
 from werkzeug.utils import secure_filename
 from uploadDocs import allowed_file, upload_files, get_document_text, create_sections, index_sections
 
@@ -57,6 +60,9 @@ AZURE_OPENAI_PREVIEW_API_VERSION = os.environ.get("AZURE_OPENAI_PREVIEW_API_VERS
 AZURE_OPENAI_STREAM = os.environ.get("AZURE_OPENAI_STREAM", "true")
 AZURE_OPENAI_MODEL_NAME = os.environ.get("AZURE_OPENAI_MODEL_NAME", "gpt-35-turbo") # Name of the model, e.g. 'gpt-35-turbo' or 'gpt-4'
 AZURE_STORAGE_ACCOUNT = os.environ.get("AZURE_STORAGE_ACCOUNT") or "mystorageaccount"
+
+
+
 SHOULD_STREAM = True if AZURE_OPENAI_STREAM.lower() == "true" else False
 
 def is_chat_model():
@@ -277,8 +283,6 @@ def fileUpload():
             file.save(filePathName)
 
             # Upload the file to a cloud storage blob
-            #blob_container = BlobServiceClient.from_connection_string(conn_str=AZURE_STORAGE_ACCOUNT, container_name=UPLOAD_FOLDER, blob_name=filename)
-            
             blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_ACCOUNT)
 
             # Instantiate a ContainerClient
@@ -290,7 +294,9 @@ def fileUpload():
             page_map = get_document_text(filename, filePathName)
 
             # Create sections from the extracted text
-            sections = create_sections(os.path.basename(filename), page_map)
+            sections = create_sections(os.path.basename(filename), page_map)          
+
+            search_client = SearchClient(AZURE_SEARCH_SERVICE, AZURE_SEARCH_INDEX, AzureKeyCredential(AZURE_SEARCH_KEY))
 
             # Index the sections for search
             index_sections(os.path.basename(filename), sections, search_client)
