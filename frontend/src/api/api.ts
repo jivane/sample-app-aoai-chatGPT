@@ -1,4 +1,4 @@
-import { UserInfo, ConversationRequest } from "./models";
+import { UserInfo, ConversationRequest, IUploadResponse } from "./models";
 
 export async function conversationApi(options: ConversationRequest, abortSignal: AbortSignal): Promise<Response> {
     const response = await fetch("/conversation", {
@@ -26,41 +26,21 @@ export async function getUserInfo(): Promise<UserInfo[]> {
     return payload;
 }
 export async function uploadFileApi(request: FormData): Promise<IUploadResponse> {
-
     // Send a POST request to the "/upload" endpoint with the provided form data
-
     const response = await fetch("/upload", {
-
         method: "POST",
-
         body: request
-
     });
 
-
-
-
     // Check if the response status is not "OK".
-
     if (!response.ok) {
-
         throw new Error(`Uploading files failed: ${response.statusText}`);
-
     }
 
-
-
-
     // Parse the JSON response into the IUploadResponse type.
-
     const dataResponse: IUploadResponse = await response.json();
 
-
-
-
     // Return the parsed data as the result of the Promise.
-
     return dataResponse;
-
 }
 
