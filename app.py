@@ -59,7 +59,7 @@ AZURE_OPENAI_MODEL_NAME = os.environ.get("AZURE_OPENAI_MODEL_NAME", "gpt-35-turb
 AZURE_STORAGE_ACCOUNT = os.environ.get("AZURE_STORAGE_ACCOUNT") or "mystorageaccount"
 AZURE_UPLOAD_FOLDER = os.environ.get("AZURE_UPLOAD_FOLDER")
 app.config['UPLOAD_FOLDER'] = 'data'
-# app.config['UPLOAD_FOLDER'] = os.environ.get("AZURE_UPLOAD_FOLDER")
+app.config['UPLOAD_FOLDER'] = os.environ.get("AZURE_UPLOAD_FOLDER")
 
 
 SHOULD_STREAM = True if AZURE_OPENAI_STREAM.lower() == "true" else False
