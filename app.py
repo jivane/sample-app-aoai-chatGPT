@@ -16,10 +16,6 @@ load_dotenv()
 
 app = Flask(__name__, static_folder="static")
 
-# define Folder path for upload temp files
-UPLOAD_FOLDER = 'data'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 # Static Files
 @app.route("/")
 def index():
@@ -32,7 +28,6 @@ def favicon():
 @app.route("/assets/<path:path>")
 def assets(path):
     return send_from_directory("static/assets", path)
-
 
 # ACS Integration Settings
 AZURE_SEARCH_SERVICE = os.environ.get("AZURE_SEARCH_SERVICE")
@@ -59,8 +54,12 @@ AZURE_OPENAI_SYSTEM_MESSAGE = os.environ.get("AZURE_OPENAI_SYSTEM_MESSAGE", "You
 AZURE_OPENAI_PREVIEW_API_VERSION = os.environ.get("AZURE_OPENAI_PREVIEW_API_VERSION", "2023-06-01-preview")
 AZURE_OPENAI_STREAM = os.environ.get("AZURE_OPENAI_STREAM", "true")
 AZURE_OPENAI_MODEL_NAME = os.environ.get("AZURE_OPENAI_MODEL_NAME", "gpt-35-turbo") # Name of the model, e.g. 'gpt-35-turbo' or 'gpt-4'
-AZURE_STORAGE_ACCOUNT = os.environ.get("AZURE_STORAGE_ACCOUNT") or "mystorageaccount"
 
+# define Folder path for upload temp files
+AZURE_STORAGE_ACCOUNT = os.environ.get("AZURE_STORAGE_ACCOUNT") or "mystorageaccount"
+AZURE_UPLOAD_FOLDER = os.environ.get("AZURE_UPLOAD_FOLDER")
+app.config['UPLOAD_FOLDER'] = 'data'
+# app.config['UPLOAD_FOLDER'] = os.environ.get("AZURE_UPLOAD_FOLDER")
 
 
 SHOULD_STREAM = True if AZURE_OPENAI_STREAM.lower() == "true" else False
