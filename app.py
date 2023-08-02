@@ -277,7 +277,7 @@ def fileUpload():
             # Securely generate a filename to prevent path traversal attacks
             filename = secure_filename(file.filename)
             # Create the full file path with the UPLOAD_FOLDER path
-            filePathName = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            filePathName = os.path.join(AZURE_UPLOAD_FOLDER, filename)
             # Save the file to the server's temp UPLOAD_FOLDER directory
             file.save(filePathName)
 
@@ -285,7 +285,7 @@ def fileUpload():
             blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_ACCOUNT)
 
             # Instantiate a ContainerClient
-            blob_container = blob_service_client.get_container_client(UPLOAD_FOLDER)
+            blob_container = blob_service_client.get_container_client(AZURE_UPLOAD_FOLDER)
 
             upload_files(filename, filePathName, blob_container)
 
